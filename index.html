@@ -1,0 +1,767 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>С днём рождения, Марина!</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --sat: env(safe-area-inset-top);
+      --sab: env(safe-area-inset-bottom);
+      --bg: #050301;
+      --orange: #ff6a00;
+      --orange-hot: #ff8a00;
+      --orange-soft: #ffb347;
+      --pink: #ff2f92;
+      --pink-soft: #ff6eb8;
+      --text: #fff0dc;
+      --muted: #ffcf9a;
+    }
+
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      min-height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      position: fixed;
+      inset: 0;
+    }
+
+    .page {
+      position: relative;
+      width: 100vw;
+      height: 100svh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(18px, 3.2svh, 28px);
+      padding: max(18px, env(safe-area-inset-top)) 14px max(18px, env(safe-area-inset-bottom));
+      background:
+        radial-gradient(circle at 12% 8%, rgba(255, 106, 0, 0.42), transparent 30%),
+        radial-gradient(circle at 92% 16%, rgba(255, 138, 0, 0.30), transparent 32%),
+        radial-gradient(circle at 78% 30%, rgba(255, 47, 146, 0.22), transparent 28%),
+        radial-gradient(circle at 50% 100%, rgba(255, 93, 0, 0.28), transparent 38%),
+        radial-gradient(circle at 50% 42%, rgba(255, 180, 70, 0.10), transparent 38%),
+        linear-gradient(180deg, #090501 0%, #030201 100%);
+    }
+
+    .bg-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      opacity: 0.28;
+      filter:
+        saturate(1.32)
+        hue-rotate(-18deg)
+        blur(1.8px)
+        brightness(0.74)
+        contrast(1.18);
+      transform: scale(1.04);
+      pointer-events: none;
+    }
+
+    .bg-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        radial-gradient(circle at center, rgba(255, 116, 0, 0.12), transparent 54%),
+        linear-gradient(180deg, rgba(0,0,0,0.36), rgba(12,4,0,0.42));
+      backdrop-filter: blur(2.8px);
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .bg-overlay::after {
+      content: "";
+      position: absolute;
+      inset: -50%;
+      opacity: 0.085;
+      background-image:
+        repeating-radial-gradient(circle at 0 0, rgba(255, 138, 0, 0.9) 0 1px, transparent 1px 4px),
+        repeating-linear-gradient(0deg, rgba(255, 106, 0, 0.10) 0 2px, transparent 2px 4px);
+      mix-blend-mode: screen;
+      animation: grainMove 18s steps(4) infinite;
+      pointer-events: none;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(52px);
+      pointer-events: none;
+      animation: orbMove 8s ease-in-out infinite;
+    }
+
+    .orb.one {
+      z-index: 2;
+      width: 220px;
+      height: 220px;
+      left: -90px;
+      top: 40px;
+      background: rgba(255, 106, 0, 0.52);
+    }
+
+    .orb.two {
+      z-index: 2;
+      width: 230px;
+      height: 230px;
+      right: -90px;
+      top: 210px;
+      background: rgba(255, 47, 146, 0.34);
+      animation-delay: -2s;
+    }
+
+    .orb.three {
+      z-index: 2;
+      width: 280px;
+      height: 280px;
+      left: 50%;
+      bottom: -160px;
+      transform: translateX(-50%);
+      background: rgba(255, 80, 0, 0.36);
+      animation-delay: -4s;
+    }
+
+    @keyframes orbMove {
+      0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+      50% { transform: translate3d(14px, -12px, 0) scale(1.08); }
+    }
+
+    @keyframes titleGradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes retroShine {
+      0% { transform: translateX(-120%) skewX(-18deg); opacity: 0; }
+      18% { opacity: 0.85; }
+      52% { transform: translateX(120%) skewX(-18deg); opacity: 0.18; }
+      100% { transform: translateX(120%) skewX(-18deg); opacity: 0; }
+    }
+
+    @keyframes grainMove {
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(-2%, 1%); }
+      50% { transform: translate(1%, -1.5%); }
+      75% { transform: translate(-1%, 2%); }
+      100% { transform: translate(0, 0); }
+    }
+
+    @keyframes titleFloat {
+      0%, 100% { transform: translate3d(0, 0, 0) rotate(-0.35deg) scale(1); }
+      50% { transform: translate3d(0, -8px, 0) rotate(0.35deg) scale(1.012); }
+    }
+
+    .title {
+      position: relative;
+      z-index: 20;
+      width: 100%;
+      max-width: 460px;
+      margin: 0;
+      padding-bottom: 0.08em;
+      text-align: center;
+      font-size: clamp(42px, 14vw, 74px);
+      line-height: 0.9;
+      letter-spacing: -0.07em;
+      font-weight: 1000;
+      transform-origin: center;
+      animation: titleFloat 5.4s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    .title-name {
+      font-family: "Snell Roundhand", "Brush Script MT", "Apple Chancery", "Segoe Script", cursive;
+      font-size: 1.12em;
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      line-height: 0.92;
+      transform: rotate(-2deg);
+      display: inline-block;
+      margin-top: 0.02em;
+    }
+
+    .title span {
+      position: relative;
+      display: block;
+      padding: 0.02em 0 0.08em;
+      background: linear-gradient(
+        135deg,
+        #ff4d00 0%,
+        #ff8a00 24%,
+        #fff3df 46%,
+        #ff6eb8 68%,
+        #ff4d00 100%
+      );
+      background-size: 240% 240%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      animation: titleGradientMove 6s ease-in-out infinite;
+      filter:
+        drop-shadow(0 0 10px rgba(255, 120, 0, 0.46))
+        drop-shadow(0 0 26px rgba(255, 106, 0, 0.52))
+        drop-shadow(0 0 34px rgba(255, 47, 146, 0.32))
+        drop-shadow(0 8px 30px rgba(255, 80, 0, 0.34));
+    }
+
+    .title span::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255,255,255,0.0) 35%,
+        rgba(255,245,224,0.78) 50%,
+        rgba(255,255,255,0.0) 65%,
+        transparent 100%
+      );
+      opacity: 0.72;
+      transform: translateX(-120%) skewX(-18deg);
+      animation: retroShine 4.8s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .stage {
+      position: relative;
+      z-index: 5;
+      width: 100%;
+      max-width: 430px;
+      height: min(54svh, 520px);
+      min-height: 430px;
+      display: grid;
+      place-items: center;
+      overflow: visible;
+      flex: 0 0 auto;
+    }
+
+    .bubble-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      overflow: visible;
+      pointer-events: none;
+    }
+
+    .character-card {
+      position: relative;
+      z-index: 10;
+      width: min(62vw, 252px);
+      aspect-ratio: 3 / 5;
+      overflow: hidden;
+      border-radius: 34px;
+      border: 1px solid rgba(255, 138, 0, 0.48);
+      background: rgba(12, 6, 1, 0.82);
+      box-shadow:
+        0 0 0 1px rgba(255, 190, 90, 0.16),
+        0 30px 78px rgba(255, 106, 0, 0.28),
+        0 16px 46px rgba(0, 0, 0, 0.58),
+        inset 0 1px 0 rgba(255, 205, 145, 0.32);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transform-origin: center;
+      animation:
+        cardIn 700ms cubic-bezier(.2,.9,.2,1) both,
+        videoCardFloat 5.8s ease-in-out 900ms infinite,
+        videoCardGlow 7s ease-in-out 1.2s infinite;
+      will-change: transform, box-shadow;
+    }
+
+    .character-card video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .character-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(
+        135deg,
+        rgba(255,160,70,.18),
+        rgba(255, 47, 146, .10) 18%,
+        rgba(255,106,0,.08) 38%,
+        rgba(0,0,0,.08) 72%,
+        rgba(255,210,150,.08)
+      );
+    }
+
+    .bubble {
+      position: fixed;
+      left: var(--start-x);
+      top: var(--start-y);
+      z-index: 1000;
+      max-width: min(170px, calc(100vw - 48px));
+      padding: 10px 13px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 138, 0, 0.48);
+      background: rgba(18, 7, 14, 0.68);
+      box-shadow:
+        0 0 22px rgba(255, 106, 0, 0.22),
+        0 16px 36px rgba(0, 0, 0, 0.34),
+        inset 0 1px 0 rgba(255, 190, 100, 0.20);
+      color: #ffe0bd;
+      font-size: clamp(11px, 3vw, 12px);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      opacity: 0;
+      will-change: transform, opacity;
+      transform: translate3d(-50%, -50%, 0) scale(0.76);
+      animation: bubbleFloat var(--duration) cubic-bezier(.16,.84,.28,1) forwards;
+    }
+
+    .bubble::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      opacity: 0.82;
+      background: linear-gradient(
+        135deg,
+        rgba(255, 106, 0, .30),
+        rgba(255,255,255,.04),
+        rgba(255, 47, 146, .22)
+      );
+      pointer-events: none;
+    }
+
+    .bubble span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .final-love {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      z-index: 2000;
+      transform: translate(-50%, -50%) rotate(-6deg) scale(0.82);
+      opacity: 0;
+      pointer-events: none;
+      text-align: center;
+      font-family: "Snell Roundhand", "Brush Script MT", "Apple Chancery", "Segoe Script", cursive;
+      font-size: clamp(72px, 18vw, 132px);
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      line-height: 0.92;
+      color: #ff7a00;
+      background: linear-gradient(135deg, #ff7a00 0%, #ff2f92 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow:
+        0 0 8px rgba(255, 240, 220, 0.34),
+        0 0 38px rgba(255, 106, 0, 0.86),
+        0 0 48px rgba(255, 47, 146, 0.46),
+        0 12px 44px rgba(255, 80, 0, 0.42);
+      mix-blend-mode: normal;
+      filter:
+        saturate(1.24)
+        brightness(1.12)
+        drop-shadow(0 0 22px rgba(255, 106, 0, 0.72));
+    }
+
+    .final-love.show {
+      animation:
+        finalLoveIn 1.4s cubic-bezier(.18,.9,.2,1) forwards,
+        finalLoveFloat 4.8s ease-in-out 1.4s infinite,
+        finalLoveOut 1.4s ease-in-out 8.4s forwards;
+    }
+
+    .caption {
+      position: relative;
+      z-index: 20;
+      width: 100%;
+      max-width: 380px;
+      margin: -6px auto 0;
+      padding: 0;
+      border: none;
+      background: transparent;
+      box-shadow: none;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      color: #ff9d57;
+      text-align: center;
+      font-family: "Snell Roundhand", "Brush Script MT", "Apple Chancery", "Segoe Script", cursive;
+      font-size: clamp(25px, 6vw, 36px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.08;
+      transform: rotate(-2deg);
+      text-shadow:
+        0 0 10px rgba(255, 106, 0, 0.42),
+        0 0 18px rgba(255, 47, 146, 0.24),
+        0 4px 18px rgba(255, 106, 0, 0.28);
+      -webkit-text-stroke: 0.2px rgba(255, 175, 80, 0.24);
+      animation: cardIn 700ms cubic-bezier(.2,.9,.2,1) 1.1s both;
+      flex: 0 0 auto;
+    }
+
+    @keyframes videoCardFloat {
+      0%, 100% { transform: translate3d(0, 0, 0) rotate(-0.45deg) scale(1); }
+      50% { transform: translate3d(0, -7px, 0) rotate(0.45deg) scale(1.012); }
+    }
+
+    @keyframes videoCardGlow {
+      0%, 100% {
+        box-shadow:
+          0 0 0 1px rgba(255, 190, 90, 0.16),
+          0 30px 78px rgba(255, 106, 0, 0.28),
+          0 16px 46px rgba(0, 0, 0, 0.58),
+          inset 0 1px 0 rgba(255, 205, 145, 0.32);
+      }
+      50% {
+        box-shadow:
+          0 0 0 1px rgba(255, 190, 90, 0.24),
+          0 36px 92px rgba(255, 106, 0, 0.38),
+          0 20px 56px rgba(0, 0, 0, 0.66),
+          inset 0 1px 0 rgba(255, 205, 145, 0.42);
+      }
+    }
+
+    @keyframes cardIn {
+      from { opacity: 0; transform: translate3d(0, 18px, 0) scale(.96); }
+      to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+    }
+
+    @keyframes finalLoveIn {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.72) rotate(-6deg);
+        filter: blur(10px);
+      }
+      100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1) rotate(-6deg);
+        filter: blur(0px);
+      }
+    }
+
+    @keyframes finalLoveFloat {
+      0%, 100% { transform: translate(-50%, -50%) translateY(0px) rotate(-6deg); }
+      50% { transform: translate(-50%, -50%) translateY(-10px) rotate(-4deg); }
+    }
+
+    @keyframes finalLoveOut {
+      0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1) rotate(-6deg);
+        filter: blur(0px);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.92) rotate(-8deg);
+        filter: blur(10px);
+      }
+    }
+
+    @keyframes bubbleFloat {
+      0% {
+        opacity: 0;
+        transform: translate3d(-50%, -50%, 0) scale(.72) rotate(0deg);
+      }
+      18% {
+        opacity: 1;
+        transform: translate3d(-50%, -50%, 0) translate3d(calc(var(--x) * .82), calc(var(--y) * .82), 0) scale(1) rotate(calc(var(--r) * .7));
+      }
+      82% {
+        opacity: 1;
+        transform: translate3d(-50%, -50%, 0) translate3d(var(--x), var(--y), 0) scale(1) rotate(var(--r));
+      }
+      100% {
+        opacity: 0;
+        transform: translate3d(-50%, -50%, 0) translate3d(calc(var(--x) + var(--drift-x)), calc(var(--y) + var(--drift-y)), 0) scale(.98) rotate(var(--r));
+      }
+    }
+
+    @media (max-height: 720px) {
+      .page { gap: 12px; }
+      .title { font-size: clamp(34px, 12vw, 50px); }
+      .character-card {
+        width: min(54vw, 210px);
+        border-radius: 30px;
+      }
+      .stage {
+        height: 50svh;
+        min-height: 365px;
+      }
+      .caption {
+        font-size: 23px;
+        padding: 0;
+        margin: -4px auto 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <video
+      class="bg-video"
+      src="https://d8j0ntlcm91z4.cloudfront.net/user_39w3UnvmHnMqRhz0SRwuNgesDnk/hf_20260526_134204_4546de1e-9769-4879-ab6c-041839efd567.mp4"
+      autoplay
+      muted
+      loop
+      playsinline
+    ></video>
+
+    <div class="bg-overlay"></div>
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+    <div class="orb three"></div>
+
+    <h1 class="title">
+      <span>С Днём</span>
+      <span>Рождения</span>
+      <span class="title-name">Марина!</span>
+    </h1>
+
+    <section class="stage" aria-label="Поздравление">
+      <div class="bubble-layer" id="bubbleLayer"></div>
+
+      <div class="character-card">
+        <video
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_39w3UnvmHnMqRhz0SRwuNgesDnk/hf_20260526_122952_362061eb-565f-492f-b015-14ecbe9571a5.mp4"
+          autoplay
+          muted
+          loop
+          playsinline
+        ></video>
+      </div>
+    </section>
+
+    <div class="final-love" id="finalLove">Сияй!</div>
+
+    <p class="caption">от Маши, Арины, Никиты и Оксаны</p>
+  </main>
+
+  <script>
+    const messages = [
+      "С днём рождения, Марина! 🎉💖",
+      "Марина, happy birthday! 🎂✨",
+      "Пусть сегодня будет красиво! 🌸",
+      "И весь год тоже! 💫",
+      "Улыбок до ушей 😄✨",
+      "Кайфа от каждого дня 💖",
+      "Побольше поводов радоваться 🎊",
+      "Поменьше поводов париться 🫶",
+      "Легкости во всем 🕊️",
+      "Удачи во всех начинаниях 🚀",
+      "Пусть всё складывается красиво 💎",
+      "Больше смеха 😂✨",
+      "Больше вдохновения! 🌟",
+      "Больше классных историй! 📸✨",
+      "Пусть желания исполняются! 💫",
+      "Марина, сияй на максимум! ⚡",
+      "Хороших людей рядом 🫂",
+      "Тепла, любви и заботы рядом 🧡",
+      "Чтобы всё у тебя получалось 🌟",
+      "Ярких моментов ✨💖",
+      "Самых теплых вечеров! 🧡",
+      "Марина, будь счастлива! 💖",
+      "🥳🎉💃",
+      "Пусть жизнь будет сладкой 🎂🍊",
+      "🍰🧁✨",
+      "Приятных сюрпризов 🎁💖",
+      "🎈🎈🎈🎈🎈",
+      "Делай то, что нравится 💪✨",
+      "🧡💖⚡",
+      "Ты красотка! Сияй ✨",
+      "Сияй! ✨💎",
+      "Много энергии! ⚡💥",
+      "Классных путешествий! ✈️🌍",
+      "Больше вдохновения 🎨💫",
+      "С днём рождения! М., А., Н. и О. 🚀🧡"
+    ];
+
+    const characterVideo = document.querySelector(".character-card video");
+    const backgroundVideo = document.querySelector(".bg-video");
+
+    let messageIndex = 0;
+    let bubbleTimer = null;
+    let activeBubbles = 0;
+    let allMessagesShown = false;
+    let finalLoveShown = false;
+    const order = shuffle(messages.length);
+
+    function randomBetween(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    function shuffle(length) {
+      const arr = Array.from({ length }, (_, index) => index);
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function showFinalLoveWhenReady() {
+      if (!allMessagesShown || activeBubbles > 0 || finalLoveShown) return;
+
+      finalLoveShown = true;
+      window.setTimeout(() => {
+        const finalLove = document.getElementById("finalLove");
+        if (finalLove) {
+          finalLove.classList.add("show");
+        }
+      }, 500);
+    }
+
+    function spawnBubble(message) {
+      activeBubbles += 1;
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.innerHTML = `<span>${message}</span>`;
+
+      const card = document.querySelector(".character-card");
+      const cardRect = card.getBoundingClientRect();
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+      const centerX = cardRect.left + cardRect.width / 2;
+      const centerY = cardRect.top + cardRect.height / 2;
+
+      const isSmallScreen = screenWidth < 430;
+      const marginX = isSmallScreen ? 92 : 104;
+      const safeTop = Math.max(86, Number.parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--sat")) || 0);
+      const safeBottom = isSmallScreen ? 132 : 118;
+      const minX = marginX;
+      const maxX = screenWidth - marginX;
+      const minY = safeTop;
+      const maxY = screenHeight - safeBottom;
+
+      function clamp(value, min, max) {
+        return Math.min(Math.max(value, min), max);
+      }
+
+      function safeRandomX(min, max) {
+        const left = clamp(min, minX, maxX);
+        const right = clamp(max, minX, maxX);
+        if (right <= left) return clamp((min + max) / 2, minX, maxX);
+        return randomBetween(left, right);
+      }
+
+      function safeRandomY(min, max) {
+        const top = clamp(min, minY, maxY);
+        const bottom = clamp(max, minY, maxY);
+        if (bottom <= top) return clamp((min + max) / 2, minY, maxY);
+        return randomBetween(top, bottom);
+      }
+
+      const zones = [
+        {
+          startX: clamp(centerX + randomBetween(-28, 28), minX, maxX),
+          startY: clamp(cardRect.top + 12, minY, maxY),
+          targetX: safeRandomX(88, screenWidth - 88),
+          targetY: safeRandomY(safeTop, cardRect.top - 20)
+        },
+        {
+          startX: clamp(cardRect.left + 12, minX, maxX),
+          startY: clamp(centerY + randomBetween(-70, 50), minY, maxY),
+          targetX: safeRandomX(88, cardRect.left - 24),
+          targetY: safeRandomY(132, screenHeight - safeBottom)
+        },
+        {
+          startX: clamp(cardRect.right - 12, minX, maxX),
+          startY: clamp(centerY + randomBetween(-70, 50), minY, maxY),
+          targetX: safeRandomX(cardRect.right + 24, screenWidth - 88),
+          targetY: safeRandomY(132, screenHeight - safeBottom)
+        },
+        {
+          startX: clamp(centerX + randomBetween(-32, 32), minX, maxX),
+          startY: clamp(cardRect.bottom - 10, minY, maxY),
+          targetX: safeRandomX(88, screenWidth - 88),
+          targetY: safeRandomY(cardRect.bottom + 24, screenHeight - safeBottom)
+        }
+      ];
+
+      const zone = zones[Math.floor(Math.random() * zones.length)];
+
+      bubble.style.setProperty("--start-x", `${zone.startX}px`);
+      bubble.style.setProperty("--start-y", `${zone.startY}px`);
+      bubble.style.setProperty("--x", `${zone.targetX - zone.startX}px`);
+      bubble.style.setProperty("--y", `${zone.targetY - zone.startY}px`);
+      bubble.style.setProperty("--drift-x", `${randomBetween(-4, 4).toFixed(1)}px`);
+      bubble.style.setProperty("--drift-y", `${randomBetween(-4, 4).toFixed(1)}px`);
+      bubble.style.setProperty("--r", `${randomBetween(-5, 5).toFixed(2)}deg`);
+      bubble.style.setProperty("--duration", `${randomBetween(7.2, 8.8).toFixed(2)}s`);
+
+      document.body.appendChild(bubble);
+
+      bubble.addEventListener("animationend", () => {
+        bubble.remove();
+        activeBubbles = Math.max(0, activeBubbles - 1);
+        showFinalLoveWhenReady();
+      }, { once: true });
+    }
+
+    function tick() {
+      if (messageIndex >= messages.length) {
+        if (bubbleTimer) {
+          window.clearInterval(bubbleTimer);
+          bubbleTimer = null;
+        }
+
+        allMessagesShown = true;
+        showFinalLoveWhenReady();
+        return;
+      }
+
+      const index = order[messageIndex];
+      spawnBubble(messages[index]);
+      messageIndex += 1;
+    }
+
+    function startMessages() {
+      tick();
+      bubbleTimer = window.setInterval(tick, 540);
+    }
+
+    function init() {
+      if (characterVideo) {
+        characterVideo.muted = true;
+        characterVideo.play().catch(() => {});
+      }
+
+      if (backgroundVideo) {
+        backgroundVideo.muted = true;
+        backgroundVideo.play().catch(() => {});
+      }
+
+      window.setTimeout(startMessages, 450);
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init);
+    } else {
+      init();
+    }
+  </script>
+</body>
+</html>
